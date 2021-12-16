@@ -33,4 +33,9 @@ public class BeerServiceImpl implements BeerService {
       //todo - would add a real impl to update beer  
     }
 
+    @Override
+    public void deleteById(UUID beerId) {
+        //todo - would add a real impl to delete beer  
+    }
+
 }
