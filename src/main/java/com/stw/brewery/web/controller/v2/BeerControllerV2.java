@@ -1,17 +1,21 @@
 
-package com.stw.brewery.web.controller;
+package com.stw.brewery.web.controller.v2;
 
-import com.stw.brewery.services.BeerService;
-import com.stw.brewery.web.model.BeerDto;
+import com.stw.brewery.services.v2.BeerServiceV2;
+import com.stw.brewery.web.model.v2.BeerDtoV2;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,26 +31,26 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  * @author Ramon.Talavera@gmail.com 
  */
 @Slf4j
-@RequestMapping("/api/v1/beer")
+@RequestMapping("/api/v2/beer")
 @RestController
-public class BeerController {
+public class BeerControllerV2 {
     
-    private final BeerService beerService;
+    private final BeerServiceV2 beerServiceV2;
 
-    public BeerController(BeerService beerService) {
-        this.beerService = beerService;
+    public BeerControllerV2(BeerServiceV2 beerServiceV2) {
+        this.beerServiceV2 = beerServiceV2;
     }
     
     // GET: READ RESOURCE
     @GetMapping({"/{beerId}"})
-    public ResponseEntity<BeerDto> getBeer(@PathVariable("beerId") UUID beerId){
-       return  new ResponseEntity<>(beerService.getBeerById(beerId),HttpStatus.OK);
+    public ResponseEntity<BeerDtoV2> getBeer(@PathVariable("beerId") UUID beerId){
+       return  new ResponseEntity<>(beerServiceV2.getBeerById(beerId),HttpStatus.OK);
     }
 
     // POST: CREATE RESOURCE
     @PostMapping
-    public ResponseEntity handlePost(@Valid @RequestBody BeerDto beerDto) {
-        BeerDto savedDto = beerService.saveNewBeer(beerDto);
+    public ResponseEntity handlePost(@Valid @RequestBody BeerDtoV2 beerDtoV2) {
+        BeerDtoV2 savedDto = beerServiceV2.saveNewBeer(beerDtoV2);
         
         HttpHeaders headers= new HttpHeaders();
         
@@ -74,8 +78,8 @@ public class BeerController {
     //PUT: UPDATE RESOURCE
     @PutMapping({"/{beerId}"})
     public ResponseEntity handleUpdate(
-            @PathVariable("beerId") UUID beerId, @Valid @RequestBody BeerDto beerDto){
-        beerService.updateBeer(beerId,beerDto);
+            @PathVariable("beerId") UUID beerId, @Valid @RequestBody BeerDtoV2 beerDtoV2){
+        beerServiceV2.updateBeer(beerId,beerDtoV2);
         return new ResponseEntity(HttpStatus.NO_CONTENT); //204
     }
     
@@ -83,7 +87,18 @@ public class BeerController {
     @DeleteMapping({"/{beerId}"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBeer(@PathVariable("beerId") UUID beerId){
-     beerService.deleteById(beerId);
+     beerServiceV2.deleteById(beerId);
      log.debug("Deleted!");
+    }
+    
+   @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<List> validationErrorHandler(ConstraintViolationException e){
+        List<String> errors = new ArrayList<>(e.getConstraintViolations().size());
+
+        e.getConstraintViolations().forEach(constraintViolation -> {
+            errors.add(constraintViolation.getPropertyPath() + " : " + constraintViolation.getMessage());
+        });
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,5 +1,5 @@
 
-package com.stw.brewery.web.model;
+package com.stw.brewery.web.model.v2;
 
 import java.util.UUID;
 import javax.validation.constraints.NotBlank;
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BeerDto {
+public class BeerDtoV2 {
  @Null //Do not allow user to handle the id
  private UUID id;
  
