@@ -27,7 +27,7 @@ public class MvcExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
   
-     @ExceptionHandler(ConstraintViolationException.class)
+    @ExceptionHandler(BindException.class)
     public ResponseEntity<List> handleBindException(BindException e){
         
         return new ResponseEntity<>(e.getAllErrors(), HttpStatus.BAD_REQUEST);
