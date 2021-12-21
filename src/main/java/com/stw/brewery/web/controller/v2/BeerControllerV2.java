@@ -10,10 +10,12 @@ import java.util.List;
 import java.util.UUID;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +32,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  *          ScienceTechWorks
  * @author Ramon.Talavera@gmail.com 
  */
+@Validated
 @Slf4j
 @RequestMapping("/api/v2/beer")
 @RestController
@@ -43,13 +46,13 @@ public class BeerControllerV2 {
     
     // GET: READ RESOURCE
     @GetMapping({"/{beerId}"})
-    public ResponseEntity<BeerDtoV2> getBeer(@PathVariable("beerId") UUID beerId){
+    public ResponseEntity<BeerDtoV2> getBeer(@NotNull @PathVariable("beerId") UUID beerId){
        return  new ResponseEntity<>(beerServiceV2.getBeerById(beerId),HttpStatus.OK);
     }
 
     // POST: CREATE RESOURCE
     @PostMapping
-    public ResponseEntity handlePost(@Valid @RequestBody BeerDtoV2 beerDtoV2) {
+    public ResponseEntity handlePost(@Valid @NotNull @RequestBody BeerDtoV2 beerDtoV2) {
         BeerDtoV2 savedDto = beerServiceV2.saveNewBeer(beerDtoV2);
         
         HttpHeaders headers= new HttpHeaders();
