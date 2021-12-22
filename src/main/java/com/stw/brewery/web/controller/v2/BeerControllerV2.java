@@ -5,19 +5,16 @@ import com.stw.brewery.services.v2.BeerServiceV2;
 import com.stw.brewery.web.model.v2.BeerDtoV2;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,16 +31,17 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  */
 @Validated
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/api/v2/beer")
 @RestController
 public class BeerControllerV2 {
     
     private final BeerServiceV2 beerServiceV2;
-
+/*
     public BeerControllerV2(BeerServiceV2 beerServiceV2) {
         this.beerServiceV2 = beerServiceV2;
     }
-    
+*/    
     // GET: READ RESOURCE
     @GetMapping({"/{beerId}"})
     public ResponseEntity<BeerDtoV2> getBeer(@NotNull @PathVariable("beerId") UUID beerId){
