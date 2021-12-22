@@ -1,6 +1,7 @@
 
 package com.stw.brewery.domain;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,4 +28,8 @@ public class Beer {
  
 
  private Long upc;
+ 
+ private Timestamp createdDate;
+ 
+ private Timestamp lastUpdatedDate;
 }
