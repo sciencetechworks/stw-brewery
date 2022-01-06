@@ -137,8 +137,8 @@
                                <compilerArgs>
                                        <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
                                </compilerArgs>
-                       </configuration>
-    </plugin>
+                            </configuration>
+                        </plugin>
 		</plugins>
 	</build>
 
